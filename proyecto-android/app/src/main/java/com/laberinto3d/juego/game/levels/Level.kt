@@ -49,7 +49,8 @@ class Level(
     val offPathDist: Float = 0f,
     val rotating: Boolean = false,
     val gravityScale: Float = 1f,
-    val frameT: FloatArray = FloatArray(0)
+    val frameT: FloatArray = FloatArray(0),
+    val viewZoom: Float = 1f
 ) {
     fun buildWorld(): World {
         val movers = moverDefs.map {
@@ -64,7 +65,7 @@ class Level(
         checkpoints = checkpoints, topY = topY,
         tris = tris, triNormals = triNormals, ramps = ramps, movers = movers,
         triSurf = triSurf, triColors = triColors, shellRadius = shellRadius, pathPts = pathPts, fallDrop = fallDrop, offPathDist = offPathDist,
-        rotating = rotating, gravityScale = gravityScale, frameT = frameT
+        rotating = rotating, gravityScale = gravityScale, frameT = frameT, viewZoom = viewZoom
         )
     }
 }
