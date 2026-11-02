@@ -86,6 +86,7 @@ class GameLifecycle(
         val s = GameState.currentSession
         // reiniciar la gran esfera = empezar de cero (se descarta la partida guardada)
         if (s?.levelId == Levels.SPHERE_ID) try { Prefs.clearSphereProgress() } catch (_: Throwable) { }
+        if (s?.levelId == Levels.SPHERE3_ID) try { Prefs.clearSphere3Progress() } catch (_: Throwable) { }
         startLevel(s?.levelId ?: 1)
     }
 
@@ -101,6 +102,13 @@ class GameLifecycle(
             if (saved >= 0 && ns.physics.restoreCheckpoint(saved)) {
                 ns.elapsedNanos = Prefs.getSphereElapsedMs() * 1_000_000L
                 GameLog.i("Life", "Esfera reanudada en el checkpoint ${saved + 1}")
+            }
+        }
+        if (lvl == Levels.SPHERE3_ID) {
+            val saved = try { Prefs.getSphere3Checkpoint() } catch (_: Throwable) { -1 }
+            if (saved >= 0 && ns.physics.restoreCheckpoint(saved)) {
+                ns.elapsedNanos = Prefs.getSphere3ElapsedMs() * 1_000_000L
+                GameLog.i("Life", "Esfera III reanudada en el checkpoint ${saved + 1}")
             }
         }
         ns.returnPhase = Phase.CALIBRATING
