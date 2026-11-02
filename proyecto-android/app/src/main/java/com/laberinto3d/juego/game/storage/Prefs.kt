@@ -56,7 +56,18 @@ object Prefs {
         p().edit().putInt(Keys.SPHERE_CP, cp).putLong(Keys.SPHERE_MS, elapsedMs).apply()
     }
     fun clearSphereProgress() {
-        p().edit().remove(Keys.SPHERE_CP).remove(Keys.SPHERE_MS).apply()
+        p().edit().remove(Keys.SPHERE_CP).remove(Keys.SPHERE_MS).remove(Keys.SPHERE3_CP).remove(Keys.SPHERE3_MS).remove(Keys.SPHERE3_TOTAL).apply()
+    }
+
+    // ---- Partida guardada de la Esfera III ----
+    fun getSphere3Checkpoint(): Int = p().getInt(Keys.SPHERE3_CP, -1)
+    fun getSphere3ElapsedMs(): Long = p().getLong(Keys.SPHERE3_MS, 0L)
+    fun getSphere3Total(): Int = p().getInt(Keys.SPHERE3_TOTAL, 0)
+    fun setSphere3Progress(cp: Int, total: Int, elapsedMs: Long) {
+        p().edit().putInt(Keys.SPHERE3_CP, cp).putInt(Keys.SPHERE3_TOTAL, total).putLong(Keys.SPHERE3_MS, elapsedMs).apply()
+    }
+    fun clearSphere3Progress() {
+        p().edit().remove(Keys.SPHERE3_CP).remove(Keys.SPHERE3_MS).remove(Keys.SPHERE3_TOTAL).apply()
     }
 
     fun getAutoCamera(): Boolean = p().getBoolean(Keys.SETTING_AUTO_CAMERA, true)
