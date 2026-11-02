@@ -96,7 +96,9 @@ class World(
     /** Fracción de la gravedad normal que se aplica (esfera giratoria). */
     @JvmField val gravityScale: Float = 1f,
     /** Sentido de la pista (xyz) al empezar [0] y en cada checkpoint [i+1]; sirve para orientar la esfera al reaparecer. */
-    @JvmField val frameT: FloatArray = FloatArray(0)
+    @JvmField val frameT: FloatArray = FloatArray(0),
+    /** Zoom inicial de la cámara (<1 = más cerca, siguiendo la bola). */
+    @JvmField val viewZoom: Float = 1f
 ) {
     /** Rejilla de triángulos (sólo si hay muchos; con pocos se recorren todos). */
     @JvmField val triGrid: TriGrid? = if (tris.size >= 9 * 64) TriGrid(tris, 0.8f) else null
