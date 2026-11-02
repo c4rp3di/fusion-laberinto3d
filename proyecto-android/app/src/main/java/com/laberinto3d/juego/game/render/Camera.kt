@@ -94,7 +94,7 @@ class Camera {
     }
 
     /** Esfera giratoria: cámara fija mirando al centro de la esfera, que cabe entera en pantalla. */
-    private fun configureOrbit(world: World, aspect: Float, yaw: Float, pitchDeg: Float, zoom: Float) {
+    private fun configureOrbit(world: World, aspect: Float, yaw: Float, pitchDeg: Float, zoom: Float, bx: Float, by: Float, bz: Float) {
         val tanV = kotlin.math.tan(Math.toRadians(Config.CAMERA_FOV_DEG * 0.5)).toFloat() * 0.80f
         val tanH = kotlin.math.tan(Math.toRadians(Config.CAMERA_FOV_DEG * 0.5)).toFloat() * aspect * 0.95f
         val t = min(tanV, tanH)
@@ -105,11 +105,14 @@ class Camera {
         distance = d
         val e = Math.toRadians(pitchDeg.toDouble())
         val dh = cos(e).toFloat()
-        eyeX = sin(yaw) * dh * d
-        eyeY = sin(e).toFloat() * d
-        eyeZ = cos(yaw) * dh * d
-        Matrix.lookAt(view, eyeX, eyeY, eyeZ, 0f, 0f, 0f, 0f, 1f, 0f)
-        Matrix.perspective(proj, Config.CAMERA_FOV_DEG, aspect, max(0.1f, d - rs * 1.5f), d + rs * 2f + 10f)
+        // al acercar, la vista se desplaza de forma gradual del centro de la esfera hacia la bola
+        val tf = ((1f - zoom) / 0.5f).coerceIn(0f, 1f)
+        val tx = bx * tf; val ty = by * tf; val tz = bz * tf
+        eyeX = tx + sin(yaw) * dh * d
+        eyeY = ty + sin(e).toFloat() * d
+        eyeZ = tz + cos(yaw) * dh * d
+        Matrix.lookAt(view, eyeX, eyeY, eyeZ, tx, ty, tz, 0f, 1f, 0f)
+        Matrix.perspective(proj, Config.CAMERA_FOV_DEG, aspect, max(0.1f, d * 0.15f), d + rs * 2f + 10f)
         Matrix.shiftNdc(proj, 0f, -0.08f)
         Matrix.multiply(viewProj, proj, view)
     }
@@ -122,7 +125,7 @@ class Camera {
         val yaw = CameraControl.yaw
         val pitch = CameraControl.pitchDeg
         val zoom = CameraControl.zoom
-        if (world.rotating) { configureOrbit(world, aspect, yaw, pitch, zoom); return }
+        if (world.rotating) { configureOrbit(world, aspect, yaw, pitch, zoom, bx, by, bz); return }
         if (world.isSphere) { configureFollow(aspect, yaw, pitch, zoom, bx, by, bz); return }
         fit(world, aspect, yaw, pitch)
         val d = fitDistance * zoom
