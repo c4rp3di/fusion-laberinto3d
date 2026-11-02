@@ -20,6 +20,9 @@ object Keys {
     const val SETTING_AUTO_CAMERA = "setting_auto_camera"
     const val SPHERE_CP = "sphere1_checkpoint"
     const val SPHERE_MS = "sphere1_elapsed_ms"
+    const val SPHERE3_CP = "sphere3_checkpoint"
+    const val SPHERE3_MS = "sphere3_elapsed_ms"
+    const val SPHERE3_TOTAL = "sphere3_total"
 
     // Ajustes avanzados / depuración
     const val TUNE_DEAD_ZONE = "tune_dead_zone_deg"
