@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Laberinto 3D</string>
+
+    <string name="calibrating_title">Calibración</string>
+    <string name="calibrating_text">Sostén el móvil en la postura en la que quieras jugar, quieto y con la pantalla hacia ti, y pulsa el botón.</string>
+    <string name="calibrate_button">Calibrar y jugar</string>
+    <string name="calibrate_live">Inclinación detectada: %1$s° / %2$s°</string>
+    <string name="calibrate_no_data">El acelerómetro aún no ha enviado datos. Espera un instante.</string>
+    <string name="calibrate_done">Calibrado</string>
+
+    <string name="hud_checkpoint">Checkpoint %1$d/%2$d</string>
+    <string name="hud_falls">Caídas %1$d</string>
+    <string name="checkpoint_button">Volver al checkpoint</string>
+    <string name="won_falls">Caídas: %1$d</string>
+    <string name="advanced_vertical_gain">Ganancia eje vertical</string>
+    <string name="settings_reset_view">Recentrar vista</string>
+
+    <string name="pause_title">Pausa</string>
+    <string name="resume_button">Continuar</string>
+    <string name="restart_button">Reiniciar nivel</string>
+    <string name="recalibrate_button">Recalibrar</string>
+    <string name="settings_button">Ajustes</string>
+    <string name="view_log_button">Ver registro</string>
+    <string name="levels_button">Niveles</string>
+    <string name="exit_button">Salir</string>
+    <string name="exit_again">Pulsa otra vez atrás para salir</string>
+
+    <string name="won_title">¡Nivel completado!</string>
+    <string name="won_time">Tiempo: %1$s</string>
+    <string name="won_record">¡Nuevo récord!</string>
+    <string name="won_best">Mejor tiempo: %1$s</string>
+    <string name="won_all_done">¡Has completado todos los niveles!</string>
+    <string name="repeat_button">Repetir</string>
+    <string name="next_level_button">Siguiente nivel</string>
+    <string name="menu_button">Menú</string>
+
+    <string name="lost_title">¡Te has caído!</string>
+    <string name="lost_text">La bola se salió del tablero.</string>
+    <string name="retry_button">Reintentar</string>
+
+    <string name="levels_title">Niveles</string>
+    <string name="level_locked">Bloqueado</string>
+    <string name="level_best">Mejor: %1$s</string>
+    <string name="level_no_best">Sin récord</string>
+    <string name="level_label">Nivel %1$d · %2$s</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_sound">Sonido</string>
+    <string name="settings_vibration">Vibración</string>
+    <string name="settings_sensitivity">Sensibilidad</string>
+    <string name="settings_advanced">Física avanzada</string>
+    <string name="settings_debug">Depuración</string>
+    <string name="settings_recalibrate">Recalibrar sensor</string>
+    <string name="settings_reset_progress">Borrar progreso</string>
+    <string name="settings_reset_confirm">Se borrarán los récords y los niveles desbloqueados. Pulsa otra vez para confirmar.</string>
+    <string name="settings_reset_done">Progreso borrado</string>
+    <string name="settings_back">Volver</string>
+
+    <string name="advanced_title">Física avanzada</string>
+    <string name="advanced_dead_zone">Zona muerta</string>
+    <string name="advanced_max_tilt">Inclinación máxima</string>
+    <string name="advanced_damping">Amortiguación</string>
+    <string name="advanced_restitution">Rebote</string>
+    <string name="advanced_wall_friction">Rozamiento de pared</string>
+    <string name="advanced_sensor_tau">Suavizado del sensor</string>
+    <string name="advanced_invert_x">Invertir eje horizontal</string>
+    <string name="advanced_invert_y">Invertir eje vertical</string>
+    <string name="advanced_swap">Intercambiar ejes</string>
+    <string name="advanced_reset">Restaurar valores</string>
+    <string name="advanced_hint">Si la bola rueda al revés al inclinar, activa los interruptores de ejes.</string>
+
+    <string name="debug_title">Depuración</string>
+    <string name="debug_overlay">Panel de datos en pantalla</string>
+    <string name="debug_live">Datos en directo</string>
+    <string name="debug_tools">Herramientas</string>
+    <string name="debug_test_sound">Probar sonido</string>
+    <string name="debug_test_vibration">Probar vibración</string>
+    <string name="debug_reset_ball">Recolocar bola</string>
+    <string name="debug_force_win">Forzar victoria</string>
+    <string name="debug_unlock_all">Desbloquear todos</string>
+    <string name="debug_copy_report">Copiar informe</string>
+    <string name="debug_share_report">Compartir informe</string>
+    <string name="debug_crash_test">Provocar fallo de prueba</string>
+    <string name="debug_selfcheck">Autodiagnóstico</string>
+    <string name="debug_copied">Copiado al portapapeles</string>
+    <string name="debug_hint">Mantén pulsada 3 s la esquina superior izquierda durante la partida para mostrar u ocultar el panel de datos.</string>
+
+    <string name="log_title">Registro</string>
+    <string name="log_current">Sesión actual</string>
+    <string name="log_previous">Sesión anterior</string>
+    <string name="log_crash">Último fallo</string>
+    <string name="log_refresh">Actualizar</string>
+    <string name="log_copy">Copiar</string>
+    <string name="log_share">Compartir</string>
+    <string name="log_empty">(vacío)</string>
+    <string name="log_no_crash">No hay informes de fallo guardados.</string>
+
+    <string name="error_title">No se puede iniciar</string>
+    <string name="error_no_accelerometer">Este dispositivo no tiene acelerómetro, necesario para jugar.</string>
+    <string name="error_no_gl3">Este dispositivo no admite OpenGL ES 3.0, necesario para jugar.</string>
+    <string name="error_generic">Ocurrió un error al iniciar el juego.</string>
+
+    <string name="crash_title">La app se cerró</string>
+    <string name="crash_text">La última vez que jugaste la app se cerró de forma inesperada. Puedes ver o compartir el informe del fallo.</string>
+    <string name="crash_view">Ver informe</string>
+    <string name="crash_continue">Continuar</string>
+    <string name="share_chooser">Compartir con…</string>
+    <string name="level_resume">Continuar · checkpoint %1$d/%2$d</string>
+    <string name="settings_auto_camera">Cámara automática en la Esfera</string>
+</resources>
