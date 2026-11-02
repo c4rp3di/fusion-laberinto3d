@@ -6,10 +6,12 @@ import com.laberinto3d.juego.game.physics.Vec3
 
 /** Los tres niveles de la v1.0. Todo en metros; ver sección 10 del plan. */
 object Levels {
-    const val COUNT = 13
+    const val COUNT = 14
     const val SPHERE_ID = 12
     /** Esfera II: la esfera gira con el dedo (prototipo). */
     const val SPHERE2_ID = 13
+    /** Esfera III: cuatro capas, más de cien obstáculos. */
+    const val SPHERE3_ID = 14
 
     private const val T = Config.WALL_THICKNESS
     private val H = Config.WALL_HEIGHT
@@ -38,7 +40,8 @@ object Levels {
                 10 -> MapParser.build(10, MapLevels.NAME_10, MapLevels.MAP_10)
                 11 -> MapParser.build(11, MapLevels.NAME_11, MapLevels.MAP_11)
                 12 -> SphereGenerator.generate().level
-                else -> SphereTwoGenerator.generate().level
+                13 -> SphereTwoGenerator.generate().level
+                else -> SphereThreeGenerator.generate().level
             }
             cache[i] = l
         }
@@ -49,6 +52,7 @@ object Levels {
     fun nameOf(id: Int): String = when (id) {
         SPHERE_ID -> SphereGenerator.NAME
         SPHERE2_ID -> SphereTwoGenerator.NAME
+        SPHERE3_ID -> SphereThreeGenerator.NAME
         else -> nivel(id).name
     }
 
