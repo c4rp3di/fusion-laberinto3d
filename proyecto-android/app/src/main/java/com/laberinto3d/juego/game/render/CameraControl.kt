@@ -18,6 +18,8 @@ object CameraControl {
     @Volatile var pitchDeg = Config.CAMERA_ELEVATION_DEG
     /** Multiplicador de la distancia ajustada al tablero (<1 acerca y sigue a la bola). */
     @Volatile var zoom = 1f
+    /** Zoom al restablecer la vista (lo fija el nivel). */
+    @Volatile var defaultZoom = 1f
     /** true mientras hay dos dedos en la pantalla. */
     @Volatile var gesturing = false
     /** Se pone a true al terminar un gesto; GameLoop lo consume para realinear los controles. */
@@ -30,11 +32,11 @@ object CameraControl {
         autoSuspended = false
         yaw = 0f
         pitchDeg = Config.CAMERA_ELEVATION_DEG
-        zoom = 1f
+        zoom = defaultZoom
     }
 
     val isDefault: Boolean
-        get() = yaw == 0f && pitchDeg == Config.CAMERA_ELEVATION_DEG && zoom == 1f
+        get() = yaw == 0f && pitchDeg == Config.CAMERA_ELEVATION_DEG && zoom == defaultZoom
 
     fun clamp() {
         if (pitchDeg < PITCH_MIN) pitchDeg = PITCH_MIN
