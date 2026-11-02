@@ -101,10 +101,11 @@ class GameLoop(private val accel: AccelerometerController) {
                 gravityNow.z += (gravityTarget.z - gravityNow.z) * k
                 if (sph != null) {
                     sph.step(Config.STEP, tw0, tw1, tw2, SphereInput.touching, 0.06f, 0.3f)
+                    // inclinación del móvil: empuje horizontal como en los niveles planos (sin reducir por gravityScale)
                     val g = Config.GRAVITY
                     val fx = gravityNow.x * TILT_FINE; val fz = gravityNow.z * TILT_FINE
-                    val fy = -sqrt(maxOf(0f, g * g - fx * fx - fz * fz))
-                    val gs = s.world.gravityScale
+                    val fy = -g * s.world.gravityScale
+                    val gs = 1f
                     sph.toBody(fx * gs, fy * gs, fz * gs, gTmp)
                     p.gravity.set(gTmp)
                     p.omega.set(sph.omegaB); p.alpha.set(sph.alphaB)
@@ -231,6 +232,7 @@ class GameLoop(private val accel: AccelerometerController) {
             AudioManager.playCheckpoint()
             AudioManager.vibrate(40L)
             if (s.levelId == Levels.SPHERE_ID) try { Prefs.setSphereProgress(i, s.elapsedMs) } catch (_: Throwable) { }
+            if (s.levelId == Levels.SPHERE3_ID) try { Prefs.setSphere3Progress(i, s.checkpointsTotal, s.elapsedMs) } catch (_: Throwable) { }
         }
         gravityNow.set(gravityTarget)
     }
@@ -239,6 +241,7 @@ class GameLoop(private val accel: AccelerometerController) {
         val ms = s.elapsedMs
         val record = try { Prefs.setBestTime(s.levelId, ms) } catch (_: Throwable) { false }
         if (s.levelId == Levels.SPHERE_ID) try { Prefs.clearSphereProgress() } catch (_: Throwable) { }
+        if (s.levelId == Levels.SPHERE3_ID) try { Prefs.clearSphere3Progress() } catch (_: Throwable) { }
         if (record) s.bestMs = ms
         s.lastResultMs = ms
         s.newRecord = record
@@ -262,7 +265,7 @@ class GameLoop(private val accel: AccelerometerController) {
     }
 
     companion object {
-        /** Esfera giratoria: fracción de la inclinación del móvil que se suma como ajuste fino. */
-        const val TILT_FINE = 0.3f
+        /** Esfera giratoria: fracción de la inclinación del móvil que se suma (1 = igual que en los niveles planos). */
+        const val TILT_FINE = 1.0f
     }
 }
