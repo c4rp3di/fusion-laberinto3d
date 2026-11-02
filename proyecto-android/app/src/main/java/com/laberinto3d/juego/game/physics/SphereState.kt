@@ -117,6 +117,6 @@ class SphereState {
     fun toMatrix(m: FloatArray) = q.toMatrix(m)
 
     companion object {
-        const val MAX_OMEGA = 3.5f
+        const val MAX_OMEGA = 1.3f
     }
 }
