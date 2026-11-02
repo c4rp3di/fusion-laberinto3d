@@ -99,14 +99,15 @@ class GameRenderer(private val loop: GameLoop) : GLSurfaceView.Renderer {
             if (s !== loadedSession) {
                 world.setWorld(s.world)
                 tris.setWorld(s.world)
+                CameraControl.defaultZoom = s.world.viewZoom
                 CameraControl.reset()
                 loadedSession = s
-                ball.interpolate(s.ball, 1f)
+                ball.interpolate(s.ball, 1f, s.sphere)
                 camera.configure(s.world, aspect(), ball.drawX, ball.drawY, ball.drawZ)
                 GameLog.i("GL", "Escena cargada: nivel ${s.levelId}, cámara a ${"%.2f".format(camera.fitDistance)} m, cajas ${s.world.boxes.size}")
             }
             CameraControl.clamp()
-            ball.interpolate(s.ball, alpha)
+            ball.interpolate(s.ball, alpha, s.sphere)
             camera.configure(s.world, aspect(), ball.drawX, ball.drawY, ball.drawZ)
             Telemetry.camDistance = camera.distance
             drawScene(s, alpha, t0)
