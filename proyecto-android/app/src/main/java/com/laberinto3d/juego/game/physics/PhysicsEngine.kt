@@ -91,6 +91,7 @@ class PhysicsEngine(
         won = false
         fell = false
         stuckCounter = 0
+        if (rotating) relocateHint()
         respawnListener?.invoke()
     }
 
@@ -179,7 +180,7 @@ class PhysicsEngine(
                 if (!Collision.sphereAabb(p.x, p.y, p.z, b.radius, box, contact)) continue
                 val dyn = box.dynamic
                 resolve(iter, dt, if (dyn) box.vel.x else 0f, if (dyn) box.vel.y else 0f, if (dyn) box.vel.z else 0f, dyn, box.dvx, box.dvz)
-                if (contact.ny > 0.7f && box.surface != 0) surfaceNow = box.surface
+                if (floorContact() && box.surface != 0) surfaceNow = box.surface
             }
             val tv = world.tris
             val tn = world.triNormals
@@ -188,7 +189,7 @@ class PhysicsEngine(
                     val t = gridBuf[k]
                     if (Collision.sphereTri(p.x, p.y, p.z, b.radius, tv, t * 9, tn[t * 3], tn[t * 3 + 1], tn[t * 3 + 2], contact)) {
                         resolve(iter, dt, 0f, 0f, 0f, false, 0f, 0f)
-                        if (contact.ny > 0.7f && t < world.triSurf.size && world.triSurf[t] != 0) surfaceNow = world.triSurf[t]
+                        if (floorContact() && t < world.triSurf.size && world.triSurf[t] != 0) surfaceNow = world.triSurf[t]
                     }
                 }
             } else {
@@ -196,7 +197,7 @@ class PhysicsEngine(
                 while (ti < tn.size) {
                     if (Collision.sphereTri(p.x, p.y, p.z, b.radius, tv, ti * 3, tn[ti], tn[ti + 1], tn[ti + 2], contact)) {
                         resolve(iter, dt, 0f, 0f, 0f, false, 0f, 0f)
-                        if (contact.ny > 0.7f && ti / 3 < world.triSurf.size && world.triSurf[ti / 3] != 0) surfaceNow = world.triSurf[ti / 3]
+                        if (floorContact() && ti / 3 < world.triSurf.size && world.triSurf[ti / 3] != 0) surfaceNow = world.triSurf[ti / 3]
                     }
                     ti += 3
                 }
@@ -268,7 +269,7 @@ class PhysicsEngine(
         val cps = world.checkpoints
         for (i in checkpointIndex + 1 until cps.size) {
             val c = cps[i]
-            val hit = if (rotating) nearFloorPoint(c, 0.6f) else {
+            val hit = if (rotating) nearFloorPoint(c, 0.55f) else {
                 val dx = p.x - c.x
                 val dz = p.z - c.z
                 dx * dx + dz * dz < Config.CHECKPOINT_RADIUS * Config.CHECKPOINT_RADIUS &&
@@ -294,6 +295,28 @@ class PhysicsEngine(
     private val q = Quat()
     private var pathHint = 0
 
+    /** El contacto guardado es suelo de la pista (en la esfera giratoria: la cara mira al centro). */
+    private fun floorContact(): Boolean {
+        if (!rotating) return contact.ny > 0.7f
+        val p = ball.position
+        val pl = sqrt(p.x * p.x + p.y * p.y + p.z * p.z).coerceAtLeast(1e-4f)
+        return -(contact.nx * p.x + contact.ny * p.y + contact.nz * p.z) / pl > 0.7f
+    }
+
+    /** Esfera giratoria: coloca el índice de seguimiento del recorrido en el punto más cercano a la bola. */
+    private fun relocateHint() {
+        val pts = world.pathPts
+        val n = pts.size / 3
+        if (n == 0) return
+        val p = ball.position
+        var best = Float.MAX_VALUE
+        for (i in 0 until n) {
+            val dx = pts[i * 3] - p.x; val dy = pts[i * 3 + 1] - p.y; val dz = pts[i * 3 + 2] - p.z
+            val d = dx * dx + dy * dy + dz * dz
+            if (d < best) { best = d; pathHint = i }
+        }
+    }
+
     /** Esfera giratoria: true si la bola está a menos de [r] de un punto de la pista (el centro de la bola, sobre el suelo). */
     private fun nearFloorPoint(c: Vec3, r: Float): Boolean {
         val l = sqrt(c.x * c.x + c.y * c.y + c.z * c.z).coerceAtLeast(1e-6f)
@@ -313,13 +336,14 @@ class PhysicsEngine(
         val lim = world.offPathDist * world.offPathDist
         var best = Float.MAX_VALUE
         var bi = pathHint
-        val lo = maxOf(0, pathHint - 60); val hi = minOf(n - 1, pathHint + 60)
+        // esfera giratoria: sólo cuenta el tramo cercano en el recorrido (sin atajos entre capas)
+        val lo = maxOf(0, pathHint - (if (rotating) 80 else 60)); val hi = minOf(n - 1, pathHint + (if (rotating) 25 else 60))
         for (i in lo..hi) {
             val dx = pts[i * 3] - p.x; val dy = pts[i * 3 + 1] - p.y; val dz = pts[i * 3 + 2] - p.z
             val d = dx * dx + dy * dy + dz * dz
             if (d < best) { best = d; bi = i }
         }
-        if (best > lim) {   // puede ser un salto de posición (reaparición): búsqueda completa
+        if (best > lim && !rotating) {   // puede ser un salto de posición (reaparición): búsqueda completa
             for (i in 0 until n) {
                 val dx = pts[i * 3] - p.x; val dy = pts[i * 3 + 1] - p.y; val dz = pts[i * 3 + 2] - p.z
                 val d = dx * dx + dy * dy + dz * dz
