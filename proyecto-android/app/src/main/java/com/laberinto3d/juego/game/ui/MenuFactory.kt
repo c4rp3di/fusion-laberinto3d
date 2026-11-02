@@ -142,9 +142,10 @@ class MenuFactory(private val a: Activity, private val lc: GameLifecycle) {
             val lvName = Levels.nameOf(id)
             val best = Prefs.getBestTime(id)
             val locked = id > unlocked
-            val saved = if (id == Levels.SPHERE_ID) Prefs.getSphereCheckpoint() else -1
+            val saved = if (id == Levels.SPHERE_ID) Prefs.getSphereCheckpoint() else if (id == Levels.SPHERE3_ID) Prefs.getSphere3Checkpoint() else -1
+            val savedTotal = if (id == Levels.SPHERE3_ID) Prefs.getSphere3Total().coerceAtLeast(saved + 1) else SphereGenerator.CHECKPOINTS
             val sub = if (locked) str(R.string.level_locked)
-            else if (saved >= 0) str(R.string.level_resume, saved + 1, SphereGenerator.CHECKPOINTS)
+            else if (saved >= 0) str(R.string.level_resume, saved + 1, savedTotal)
             else if (best > 0) str(R.string.level_best, UiKit.formatTime(best)) else str(R.string.level_no_best)
             val b = UiKit.button(a, str(R.string.level_label, id, lvName) + "\n" + sub,
                 if (locked) UiKit.Kind.SECONDARY else UiKit.Kind.PRIMARY) {
